@@ -38,4 +38,13 @@ module.exports = {
         console.log(error)
       })
   },
+  getPhotos: (req, res) => {
+    axios
+      .get(
+        `https://maps.googleapis.com/maps/api/place/photo?photo_reference=${req.params.photo_reference}&key=${process.env.API_KEY}`
+      )
+      .then((result) => {
+        res.send(JSON.stringify(result.data))
+      })
+  },
 }

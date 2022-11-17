@@ -16,3 +16,15 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+.res-icon {
+  height: 25px;
+}
+
+#no-choices-noshow{
+  display: none;
+}
+
+#no-choices-show{
+  display: block;
+}
+

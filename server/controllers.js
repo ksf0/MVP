@@ -25,4 +25,17 @@ module.exports = {
         console.log(error)
       })
   },
+  getNearbyActivities: (req, res) => {
+    const coords = req.params.coords
+    axios
+      .get(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=1500&type=restaurant&key=${process.env.API_KEY}`
+      )
+      .then((nearby) => {
+        res.status(200).json(nearby.data.results)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  },
 }

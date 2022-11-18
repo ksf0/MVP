@@ -11,14 +11,10 @@ export default function FeelingHungry({ value, setValue, coords, setCoords }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios
-      .get(`/api/getrestaurants/${coords.lat}%2C${coords.lng}`)
-      .then((result) => {
-        setResList(result.data)
-      })
-      .finally(() => {
-        notInterested()
-      })
+    axios.get(`/api/getrestaurants/${coords.lat}%2C${coords.lng}`).then((result) => {
+      setResList(result.data)
+      notInterested()
+    })
   }, [])
 
   const notInterested = () => {
@@ -34,7 +30,6 @@ export default function FeelingHungry({ value, setValue, coords, setCoords }) {
         })
     }
   }
-  console.log(CurrentRes)
   return (
     <>
       {CurrentRes.data ? (

@@ -8,7 +8,7 @@ import { Route, Routes } from 'react-router-dom'
 import ErrorPage from './ErrorPage.jsx'
 import FeelingHungry from './FeelingHungry.jsx'
 import FeelingBored from './FeelingBored.jsx'
-import './App.css'
+import './App.scss'
 
 export default function App() {
   const [value, setValue] = useState('')

@@ -1,42 +1,47 @@
 import { getRandom } from '../helpers.js'
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import Map from './Map.jsx'
+import PlacesInfoBox from './PlacesInfoBox.jsx'
 import axios from 'axios'
 
 export default function FeelingHungry({ value, setValue, coords, setCoords }) {
   const [ResList, setResList] = useState('')
-  const [CurrentRes, setCurrentRes] = useState({ data: false, index: undefined })
-
-  const nochoices = useRef(null)
+  const [CurrentRes, setCurrentRes] = useState({ data: false, index: undefined, info: undefined })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const config = {}
-    axios.get(`/api/getrestaurants/${coords.lat}%2C${coords.lng}`).then((result) => {
-      console.log(result)
-      setResList(result.data)
-    })
+    axios
+      .get(`/api/getrestaurants/${coords.lat}%2C${coords.lng}`)
+      .then((result) => {
+        setResList(result.data)
+      })
+      .finally(() => {
+        notInterested()
+      })
   }, [])
 
-  useEffect(() => {
-    if (ResList !== '' && ResList.length > 0) {
-      let random = getRandom(ResList)
-      setCurrentRes({ data: ResList[random], index: random })
-    }
-  }, [ResList])
-
   const notInterested = () => {
-    ResList.splice(CurrentRes.index, 1)
-    let random = getRandom(ResList)
-    setResList(ResList)
-    setCurrentRes({ data: ResList[random], index: random })
+    if (Array.isArray(ResList) && ResList.length > 0) {
+      ResList.splice(CurrentRes.index, 1)
+      let random = getRandom(ResList)
+      axios
+        .get(`http://localhost:3000/api/getrestaurantinfo/${ResList[random].place_id}`)
+        .then((result) => {
+          ResList[random].place_info = result.data
+          setResList(ResList)
+          setCurrentRes({ data: ResList[random], index: random, info: result.data })
+        })
+    }
   }
+  console.log(CurrentRes)
   return (
     <>
       {CurrentRes.data ? (
         <>
-          <img className="res-icon" src={CurrentRes.data.icon}></img>
-          <div>{CurrentRes.data.name}</div>
+          <PlacesInfoBox info={CurrentRes} />
           <button onClick={notInterested}>Not Interested</button>
+          <Map center={CurrentRes.data.geometry.location} />
         </>
       ) : (
         <div id={ResList === '' ? 'no-choices-noshow' : 'no-choices-show'}>

@@ -13,6 +13,7 @@ import './App.css'
 export default function App() {
   const [value, setValue] = useState('')
   const [coords, setCoords] = useState('')
+  const [Loading, setLoading] = useState(true)
   return (
     <>
       <Routes>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { GoogleMap, LoadScript } from '@react-google-maps/api'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 const containerStyle = {
   width: '400px',
@@ -7,13 +7,13 @@ const containerStyle = {
 }
 
 export default function Map({ center }) {
+  useEffect(() => {}, [center])
   return (
     <>
-      <LoadScript googleMapsApiKey={import.meta.env.VITE_API_KEY}>
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-          {/* Child components, such as markers, info windows, etc. */}
-        </GoogleMap>
-      </LoadScript>
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+        <Marker position={center} />
+        {/* Child components, such as markers, info windows, etc. */}
+      </GoogleMap>
     </>
   )
 }

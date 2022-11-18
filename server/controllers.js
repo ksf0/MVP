@@ -47,4 +47,13 @@ module.exports = {
         res.send(JSON.stringify(result.data))
       })
   },
+  getRestaurantInfo: (req, res) => {
+    axios
+      .get(
+        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${req.params.place_id}&fields=formatted_address%2Crating%2Cformatted_phone_number%2Copening_hours%2Cphotos%2Cdelivery%2Cwebsite&key=${process.env.API_KEY}`
+      )
+      .then((result) => {
+        res.status(200).json(result.data.result)
+      })
+  },
 }

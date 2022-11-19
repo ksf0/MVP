@@ -10,7 +10,7 @@ export default function Map({ center }) {
   useEffect(() => {}, [center])
   return (
     <>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={14}>
         <Marker position={center} />
         {/* Child components, such as markers, info windows, etc. */}
       </GoogleMap>

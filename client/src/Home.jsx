@@ -10,6 +10,12 @@ export default function Home({ value, setValue, coords, setCoords }) {
       setCoords(info.data)
     })
   }
+
+  useEffect(() => {
+    if (typeof value === 'object') {
+      getLocInfo()
+    }
+  }, [value])
   return (
     <>
       <GooglePlacesAutocomplete
@@ -33,18 +39,14 @@ export default function Home({ value, setValue, coords, setCoords }) {
           onChange: setValue,
         }}
       />
-      {value === '' ? null : (
-        <div className="confirmation">
-          <div>confirm address: {value.label}</div>
-          <button onClick={getLocInfo}>CONFIRM</button>
-        </div>
-      )}
-      {coords === '' ? null : (
-        <div>
-          <Link to="/feelinghungry">Feeling Hungry? </Link>
-          <Link to="/feelingbored">Feeling Bored? </Link>
-        </div>
-      )}
+      <div className="confirmation">
+        {coords === '' ? null : (
+          <div>
+            <Link to="/feelinghungry">I'm Feeling Hungry</Link>
+            {/* <Link to="/feelingbored">Feeling Bored? </Link> */}
+          </div>
+        )}
+      </div>
     </>
   )
 }

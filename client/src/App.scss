@@ -1,4 +1,4 @@
-html {
+#root, html {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -57,3 +57,22 @@ body {
   width: 100%;
 }
 
+.CImage {
+  width: 300px;
+}
+
+.slide {
+  width: 500px;
+
+}
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmation {
+  background-color: #242424;
+  color: white
+}

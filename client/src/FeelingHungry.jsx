@@ -9,13 +9,19 @@ export default function FeelingHungry({ value, setValue, coords, setCoords }) {
   const [ResList, setResList] = useState('')
   const [CurrentRes, setCurrentRes] = useState({ data: false, index: undefined, info: undefined })
   const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const fetchData = async () => {
+      let restaurants = await axios.get(`/api/getrestaurants/${coords.lat}%2C${coords.lng}`)
+      setResList(restaurants.data)
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
-    axios.get(`/api/getrestaurants/${coords.lat}%2C${coords.lng}`).then((result) => {
-      setResList(result.data)
+    if (CurrentRes.data === false) {
       notInterested()
-    })
-  }, [])
+    }
+  }, [ResList])
 
   const notInterested = () => {
     if (Array.isArray(ResList) && ResList.length > 0) {
@@ -27,12 +33,13 @@ export default function FeelingHungry({ value, setValue, coords, setCoords }) {
           ResList[random].place_info = result.data
           setResList(ResList)
           setCurrentRes({ data: ResList[random], index: random, info: result.data })
+          setLoading(false)
         })
     }
   }
   return (
     <>
-      {CurrentRes.data ? (
+      {!loading ? (
         <>
           <PlacesInfoBox info={CurrentRes} />
           <button onClick={notInterested}>Not Interested</button>

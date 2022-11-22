@@ -9,6 +9,7 @@ export default function FeelingHungry({ value, setValue, coords, setCoords }) {
   const [ResList, setResList] = useState('')
   const [CurrentRes, setCurrentRes] = useState({ data: false, index: undefined, info: undefined })
   const [loading, setLoading] = useState(true)
+  const [swiper, setSwiper] = useState(null)
   useEffect(() => {
     const fetchData = async () => {
       let restaurants = await axios.get(`/api/getrestaurants/${coords.lat}%2C${coords.lng}`)
@@ -22,35 +23,53 @@ export default function FeelingHungry({ value, setValue, coords, setCoords }) {
       notInterested()
     }
   }, [ResList])
-
   const notInterested = () => {
     if (Array.isArray(ResList) && ResList.length > 0) {
       ResList.splice(CurrentRes.index, 1)
       let random = getRandom(ResList)
-      axios
-        .get(`http://localhost:3000/api/getrestaurantinfo/${ResList[random].place_id}`)
-        .then((result) => {
-          ResList[random].place_info = result.data
-          setResList(ResList)
-          setCurrentRes({ data: ResList[random], index: random, info: result.data })
-          setLoading(false)
-        })
+      axios.get(`/api/getrestaurantinfo/${ResList[random].place_id}`).then((result) => {
+        ResList[random].place_info = result.data
+        setResList(ResList)
+        setCurrentRes({ data: ResList[random], index: random, info: result.data })
+        setLoading(false)
+        if (swiper) {
+          swiper.slideTo(0)
+        }
+      })
     }
+  }
+
+  const handleSave = () => {
+    axios({
+      method: 'post',
+      url: '/api/saverestaurant',
+      data: { user: 'me', restaurant: CurrentRes },
+    }).catch((err) => {
+      if (err) {
+        console.log(err)
+      }
+    })
   }
   return (
     <>
-      {!loading ? (
+      {!loading && ResList.length > 1 ? (
         <>
-          <PlacesInfoBox info={CurrentRes} />
-          <button onClick={notInterested}>Not Interested</button>
           <Map center={CurrentRes.data.geometry.location} />
+          <PlacesInfoBox info={CurrentRes} swiper={swiper} setSwiper={setSwiper} />
+          <button onClick={handleSave}>Save</button>
+          <button onClick={notInterested}>Next</button>
         </>
       ) : (
-        <div id={ResList === '' ? 'no-choices-noshow' : 'no-choices-show'}>
-          You're all out of choices!
-          <div></div>
-          <Link to="/">Try again</Link>
-        </div>
+        <>
+          <div className={ResList === '' || loading ? 'no-choices-noshow' : 'no-choices-show'}>
+            You're all out of choices!
+            <div>
+              <Link className="no-choices-show" to="/">
+                <button>Try Again</button>
+              </Link>
+            </div>
+          </div>
+        </>
       )}
     </>
   )

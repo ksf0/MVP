@@ -10,6 +10,9 @@
   "dependencies": {
     "@coreui/coreui": "^4.2.2",
     "@coreui/react": "^4.4.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.14",
     "@react-google-maps/api": "^2.17.0",
     "axios": "^0.26.0",
     "dotenv": "^16.0.3",
@@ -17,7 +20,8 @@
     "react-dom": "^17.0.2",
     "react-google-places-autocomplete": "^3.4.0",
     "react-router-dom": "^6.4.3",
-    "sass": "^1.56.1"
+    "sass": "^1.56.1",
+    "swiper": "^8.4.4"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.7",

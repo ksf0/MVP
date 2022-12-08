@@ -4,6 +4,8 @@ const express = require('express'),
   PORT = 5001,
   app = express()
 
+app.use(express.json())
+
 app.use('/api', router)
 
 app.use(function (req, res, next) {

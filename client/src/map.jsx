@@ -9,7 +9,6 @@ const containerStyle = {
 }
 
 export default function Map({ center }) {
-  useEffect(() => {}, [center])
   return (
     <>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={14}>

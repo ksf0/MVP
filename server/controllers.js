@@ -1,5 +1,6 @@
 const axios = require('axios')
 require('dotenv').config()
+const db = require('./db.js')
 
 module.exports = {
   getCoords: (req, res) => {
@@ -56,7 +57,31 @@ module.exports = {
         res.status(200).json(result.data.result)
       })
   },
-  sayHi: (req, res) => {
-    res.status(200).json('hi')
+  saveRestaurant: (req, res) => {
+    db.create({ user: req.body.user, restaurant: req.body.restaurant }, function (err) {
+      if (err) {
+        console.log(err)
+      }
+    })
+    res.sendStatus(201)
+  },
+  getSavedRestaurants: (req, res) => {
+    db.find({ user: req.params.user }, { _id: 0, restaurant: 1 }, function (err, data) {
+      if (err) {
+        console.log(err)
+      } else {
+        res.status(200).json(data)
+      }
+    })
+  },
+  keywordSearch: (req, res) => {
+    const coords = req.params.coords
+    axios
+      .get(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coords}&radius=1500&type=restaurant&keyword=${req.params.keyword}&key=${process.env.API_KEY}`
+      )
+      .then((result) => {
+        res.status(200).json(result.data)
+      })
   },
 }
